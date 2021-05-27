@@ -4,8 +4,7 @@ from mysite.net import NetFile
 from queue import Queue
 import json
 
-# HOST = 'localhost'
-HOST = '192.168.0.41'
+HOST = '192.168.0.41' # 클라우드 서버 주소
 PORT = 6000
 STREAM_PORT = 6001
 
