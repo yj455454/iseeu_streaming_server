@@ -4,7 +4,7 @@ from mysite.net import NetFile
 from queue import Queue
 import json
 
-HOST = '192.168.0.41' # 클라우드 서버 주소
+HOST = '192.168.35.84' # 클라우드 서버 주소
 PORT = 6000
 STREAM_PORT = 6001
 
@@ -47,6 +47,7 @@ class CameraProxy(Proxy, Thread):   # Camera Subject
         self.observers.append(ob)
         if len(self.observers) == 1:
             self.command("start_stream", kwargs = {"host": HOST, "port": self.port})
+            print('연결된 포트 : ', self.port)
 
     def unregist(self, ob):
         self.observers.remove(ob)
@@ -86,7 +87,9 @@ class MjpegObserver:
         self.subject.regist(self)
         try:
             while True:
+                print('큐의 크기 : ', self.queue.qsize())
                 data = self.queue.get()
+                print(len(data))
                 # yield (b'--frame\r\n'
                 #         b'Content-Length: ' + f'{len(data)}'.encode() + b'\r\n'
                 #         b'Content-Type: image/jpeg\cr\n\r\n' + data + b'\r\n')
@@ -146,7 +149,7 @@ class ProxyPool(Thread):
             s.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
             s.settimeout(1)   
             s.bind((HOST, PORT))
-            s.listen(1)     
+            s.listen(1)
             while True:
                 try:
                     client_socket, _ = s.accept()	
